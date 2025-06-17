@@ -6,29 +6,23 @@
 #include <QMessageBox>
 #include <QTimer>
 #include "game_window.h"
-
-// Callback setter for return button
 void SetCallBackAIGame(void (*Copy_ptr)(void));
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class game_window; }
 QT_END_NAMESPACE
 
-class TestGameLogic; // Forward declaration for testing
+class TestGameLogic; // Forward declaration
 
 class ai : public game_window
 {
     Q_OBJECT
-    friend class TestGameLogic;
+    friend class TestGameLogic; // Make test class a friend
 
 public:
-    explicit ai(QWidget *parent = nullptr);
+    ai(QWidget *parent = nullptr);
     ~ai();
-
-    // Board state
     char board[3][3];
-
-    // Game logic utilities
     bool checkWin(QString player);
     bool isBoardFull();
 
@@ -41,16 +35,10 @@ private slots:
 
 private:
     Ui::game_window *ui;
-
-    // UI grid buttons
     QPushButton *cells[3][3];
-
-    // Game state
     QString currentPlayer;
-    QString aiToken;
-    QString playerToken;
-
-    // Internal logic
+    QString aiToken ;
+    QString playerToken ;
     void initializeBoard();
     void printBoard();
     int minimax(char board[3][3], int depth, bool isMaximizing);
