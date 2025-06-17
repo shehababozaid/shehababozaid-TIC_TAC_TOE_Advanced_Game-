@@ -10,8 +10,7 @@
 void (*CallBackAIGame)(void);
 
 ai::ai(QWidget *parent)
-    : game_window(parent)
-    , ui(new Ui::game_window)
+    : game_window(parent), ui(new Ui::game_window)
 {
     ui->setupUi(this);
     initializeBoard();
@@ -26,35 +25,6 @@ ai::ai(QWidget *parent)
         "background-position: center;"
         "background-size: cover;"
     );
-
-    ui->RESET->setStyleSheet(
-        "QPushButton {"
-        " background-color: #a8dadc;"
-        " color: black;"
-        " font-weight: bold;"
-        " border-radius: 8px;"
-        " padding: 10px;"
-        "}"
-        "QPushButton:hover {"
-        " background-color: #74c69d;"
-        "}"
-    );
-
-    ui->Return_Prof->setStyleSheet(
-        "QPushButton {"
-        " background-color: #f4a261;"
-        " color: white;"
-        " font-weight: bold;"
-        " border-radius: 8px;"
-        " padding: 10px;"
-        "}"
-        "QPushButton:hover {"
-        " background-color: #e76f51;"
-        "}"
-    );
-
-    ui->gridLayout->setSpacing(10);
-    ui->gridLayout->setContentsMargins(20, 20, 20, 20);
 
     if (currenttoken == 'X' || currenttoken == 'O') {
         playerToken = QString(currenttoken);
@@ -84,20 +54,7 @@ void ai::initializeBoard()
             cells[i][j]->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
             cells[i][j]->setProperty("row", i);
             cells[i][j]->setProperty("col", j);
-            cells[i][j]->setStyleSheet(
-                "QPushButton {"
-                " background-color: #f2e6d9;"
-                " color: #4d2e1f;"
-                " font-size: 24px;"
-                " font-weight: bold;"
-                " border: 2px solid #a67c52;"
-                " border-radius: 10px;"
-                "}"
-                "QPushButton:pressed {"
-                " background-color: #ddb892;"
-                "}"
-            );
-
+            cells[i][j]->setStyleSheet("background-color: #D9BBA0; color: #2F2F2F; border-radius: 6px;");
             ui->gridLayout->addWidget(cells[i][j], i, j);
             connect(cells[i][j], &QPushButton::clicked, this, &ai::cellClicked);
             board[i][j] = ' ';
@@ -134,8 +91,9 @@ void ai::cellClicked()
         font.setBold(true);
         clickedButton->setFont(font);
 
-        if(doesUserDatabaseExist(Amir));
-        else createUserDatabase(Amir);
+        if (!doesUserDatabaseExist(Amir)) {
+            createUserDatabase(Amir);
+        }
 
         if (checkWin(playerToken)) {
             QMessageBox::information(this, "Game ended", playerToken + " wins!");
@@ -161,8 +119,9 @@ void ai::resetGame()
     currentPlayer = playerToken;
     printBoard();
 
-    if (currentPlayer == aiToken)
+    if (currentPlayer == aiToken) {
         QTimer::singleShot(500, this, &ai::makeAIMove);
+    }
 }
 
 bool ai::isBoardFull()
@@ -177,10 +136,12 @@ bool ai::isBoardFull()
 bool ai::checkWin(QString player)
 {
     char token = player.at(0).toLatin1();
-    for (int i = 0; i < 3; ++i)
+
+    for (int i = 0; i < 3; ++i) {
         if ((board[i][0] == token && board[i][1] == token && board[i][2] == token) ||
             (board[0][i] == token && board[1][i] == token && board[2][i] == token))
             return true;
+    }
 
     if ((board[0][0] == token && board[1][1] == token && board[2][2] == token) ||
         (board[0][2] == token && board[1][1] == token && board[2][0] == token))
@@ -189,36 +150,14 @@ bool ai::checkWin(QString player)
     return false;
 }
 
-int ai::evaluate(char board[3][3])
-{
-    for (int row = 0; row < 3; row++) {
-        if (board[row][0] == board[row][1] && board[row][1] == board[row][2]) {
-            if (board[row][0] == aiToken.at(0).toLatin1()) return 10;
-            else if (board[row][0] == playerToken.at(0).toLatin1()) return -10;
-        }
-        if (board[0][row] == board[1][row] && board[1][row] == board[2][row]) {
-            if (board[0][row] == aiToken.at(0).toLatin1()) return 10;
-            else if (board[0][row] == playerToken.at(0).toLatin1()) return -10;
-        }
-    }
-
-    if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
-        if (board[0][0] == aiToken.at(0).toLatin1()) return 10;
-        else if (board[0][0] == playerToken.at(0).toLatin1()) return -10;
-    }
-    if (board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
-        if (board[0][2] == aiToken.at(0).toLatin1()) return 10;
-        else if (board[0][2] == playerToken.at(0).toLatin1()) return -10;
-    }
-
-    return 0;
-}
-
 int ai::minimax(char board[3][3], int depth, bool isMaximizing)
 {
     int score = evaluate(board);
-    if (score == 10 || score == -10) return score;
-    if (isBoardFull()) return 0;
+
+    if (score == 10 || score == -10)
+        return score;
+    if (isBoardFull())
+        return 0;
 
     if (isMaximizing) {
         int best = -1000;
@@ -243,31 +182,62 @@ int ai::minimax(char board[3][3], int depth, bool isMaximizing)
     }
 }
 
+int ai::evaluate(char board[3][3])
+{
+    for (int row = 0; row < 3; row++) {
+        if (board[row][0] == board[row][1] && board[row][1] == board[row][2]) {
+            if (board[row][0] == aiToken.at(0).toLatin1()) return 10;
+            if (board[row][0] == playerToken.at(0).toLatin1()) return -10;
+        }
+        if (board[0][row] == board[1][row] && board[1][row] == board[2][row]) {
+            if (board[0][row] == aiToken.at(0).toLatin1()) return 10;
+            if (board[0][row] == playerToken.at(0).toLatin1()) return -10;
+        }
+    }
+
+    if (board[0][0] == board[1][1] && board[1][1] == board[2][2]) {
+        if (board[0][0] == aiToken.at(0).toLatin1()) return 10;
+        if (board[0][0] == playerToken.at(0).toLatin1()) return -10;
+    }
+    if (board[0][2] == board[1][1] && board[1][1] == board[2][0]) {
+        if (board[0][2] == aiToken.at(0).toLatin1()) return 10;
+        if (board[0][2] == playerToken.at(0).toLatin1()) return -10;
+    }
+
+    return 0;
+}
+
 void ai::makeAIMove()
 {
-    int bestMoveVal = -1000;
-    int bestMoveRow = -1;
-    int bestMoveCol = -1;
+    int bestScore = -1000;
+    int bestRow = -1;
+    int bestCol = -1;
 
     for (int i = 0; i < 3; i++)
         for (int j = 0; j < 3; j++)
             if (board[i][j] == ' ') {
                 board[i][j] = aiToken.at(0).toLatin1();
-                int moveVal = minimax(board, 0, false);
+                int score = minimax(board, 0, false);
                 board[i][j] = ' ';
-                if (moveVal > bestMoveVal) {
-                    bestMoveRow = i;
-                    bestMoveCol = j;
-                    bestMoveVal = moveVal;
+                if (score > bestScore) {
+                    bestScore = score;
+                    bestRow = i;
+                    bestCol = j;
                 }
             }
 
-    if (bestMoveRow != -1 && bestMoveCol != -1) {
-        board[bestMoveRow][bestMoveCol] = aiToken.at(0).toLatin1();
+    if (bestRow != -1 && bestCol != -1) {
+        board[bestRow][bestCol] = aiToken.at(0).toLatin1();
+
+        QFont font;
+        font.setPointSize(26);
+        font.setBold(true);
+        cells[bestRow][bestCol]->setFont(font);
+
         printBoard();
 
-        if(doesUserDatabaseExist(Amir));
-        else createUserDatabase(Amir);
+        if (!doesUserDatabaseExist(Amir))
+            createUserDatabase(Amir);
 
         if (checkWin(aiToken)) {
             QMessageBox::information(this, "Game Over", aiToken + " wins!");
@@ -283,7 +253,8 @@ void ai::makeAIMove()
     }
 }
 
-void SetCallBackAIGame(void (*Copy_ptr)(void)){
+void SetCallBackAIGame(void (*Copy_ptr)(void))
+{
     CallBackAIGame = Copy_ptr;
 }
 
