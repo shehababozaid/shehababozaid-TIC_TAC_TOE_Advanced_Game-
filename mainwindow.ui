@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1007</width>
+    <height>706</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">.MainWindow {
+	
+	border-image: url(:/res/CSS/f9090857-a77b-48ce-a267-c997b3b21055.png);
+    opacity: 0.5; /* Adjust the opacity value as needed (0.0 to 1.0) /
+    / Other background properties /
+    background-size: cover; / Ensure the background image covers the entire element /
+    background-position: center; / Center the background image /
+    / Add more background properties as needed */
+    background-repeat: no-repeat;
+}
+</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="Quit_PB">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>420</y>
+      <width>141</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget {
+    background-color: #A0522D; /* Background color */
+}
+
+QLabel {
+    color: #FAEBD7; /* Text color */
+    font-size: 18px; /* Font size */
+    font-weight: bold; /* Font weight */
+    font-family: Arial, sans-serif; /* Font family */
+    border-radius: 5px; /* No border for the label */
+    padding: 10px; /* Padding */
+    background-color:  #A0522D; /* Background color */
+	qproperty-alignment: AlignCenter; /* Text alignment */
+}
+
+QPushButton {
+    color: #FAEBD7; /* Text color */
+    font-size: 30px; /* Font size */
+    font-weight: bold; /* Font weight */
+    font-family: Arial, sans-serif; /* Font family */
+    border-radius: 20px; /* No border for the button */
+    padding: 10px 20px; /* Padding */
+    background-color: #5C3D28; /* Button background color */
+}
+
+QPushButton:hover {
+    background-color: #C8A88E; /* Hover background color */
+
+}
+
+QPushButton:pressed
+{
+ color: #FAEBD7; /* Text color */
+    background-color: #5C3D28 /* Button background color */
+} </string>
+    </property>
+    <property name="text">
+     <string>Quit</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_3">
+    <property name="geometry">
+     <rect>
+      <x>280</x>
+      <y>310</y>
+      <width>141</width>
+      <height>42</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget {
+    background-color: rgb(255, 0, 127); /* Background color */
+}
+
+QLabel {
+    color: #000000; /* Text color */
+    font-size: 18px; /* Font size */
+    font-weight: bold; /* Font weight */
+    font-family: Arial, sans-serif; /* Font family */
+    border-radius: 20px; /* No border for the label */
+    padding: 10px; /* Padding */
+    background-color:  #EDE0CC; /* Background color */
+	qproperty-alignment: AlignCenter; /* Text alignment */
+}
+
+QPushButton {
+    color: black; /* Text color */
+    font-size: 18px; /* Font size */
+    font-weight: bold; /* Font weight */
+    font-family: Arial, sans-serif; /* Font family */
+    border-radius: 5px; /* No border for the button */
+    padding: 10px 20px; /* Padding */
+    background-color: #007bff; /* Button background color */
+}
+
+QPushButton:hover {
+    background-color: #0056b3; /* Hover background color */
+}
+</string>
+    </property>
+    <property name="text">
+     <string>First Time?</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Sign_Up_PB">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>310</y>
+      <width>141</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget {
+    background-color: #A0522D; /* Background color */
+}
+
+QLabel {
+    color: #FAEBD7; /* Text color */
+    font-size: 18px; /* Font size */
+    font-weight: bold; /* Font weight */
+    font-family: Arial, sans-serif; /* Font family */
+    border-radius: 5px; /* No border for the label */
+    padding: 10px; /* Padding */
+    background-color:  #A0522D; /* Background color */
+qproperty-alignment: AlignCenter; /* Text alignment */
+}
+
+QPushButton {
+    color: #FAEBD7; /* Text color */
+    font-size: 18px; /* Font size */
+    font-weight: bold; /* Font weight */
+    font-family: Arial, sans-serif; /* Font family */
+    border-radius: 20px; /* No border for the button */
+ border: 0.25px black;
+    padding: 10px 20px; /* Padding */
+    background-color: #5C3D28 /* Button background color */
+}
+
+QPushButton:hover {
+    background-color: #C8A88E; /* Hover background color */
+
+}
+
+QPushButton:pressed
+{
+ color: #FAEBD7; /* Text color */
+    background-color: #5C3D28 /* Button background color */
+} </string>
+    </property>
+    <property name="text">
+     <string>Sign up</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="Sign_In_PB">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>250</y>
+      <width>141</width>
+      <height>40</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QWidget {
+    background-color: #A0522D; /* Background color */
+}
+
+QLabel {
+    color: #FAEBD7; /* Text color */
+    font-size: 18px; /* Font size */
+    font-weight: bold; /* Font weight */
+    font-family: Arial, sans-serif; /* Font family */
+    border-radius: 5px; /* No border for the label */
+    padding: 10px; /* Padding */
+    background-color:  #A0522D; /* Background color */
+qproperty-alignment: AlignCenter; /* Text alignment */
+}
+
+QPushButton {
+    color: #FAEBD7; /* Text color */
+    font-size: 18px; /* Font size */
+    font-weight: bold; /* Font weight */
+    font-family: Arial, sans-serif; /* Font family */
+    border-radius: 20px; /* No border for the button */
+ border: 0.25px black;
+    padding: 10px 20px; /* Padding */
+    background-color: #5C3D28 /* Button background color */
+}
+
+QPushButton:hover {
+    background-color: #C8A88E; /* Hover background color */
+
+}
+
+QPushButton:pressed
+{
+ color: #FAEBD7; /* Text color */
+    background-color: #5C3D28 /* Button background color */
+} </string>
+    </property>
+    <property name="text">
+     <string>Sign in </string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>330</x>
+      <y>20</y>
+      <width>441</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color: #5C3D28;
+font: 700 36pt &quot;Segoe UI&quot;;
+label {
+colour:#ffffff;
+}</string>
+    </property>
+    <property name="text">
+     <string>TIC - TAC - TOE</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1007</width>
+     <height>29</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>Quit_PB</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>397</x>
+     <y>540</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>502</x>
+     <y>553</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
