@@ -61,49 +61,94 @@ jobs:
       with:
         version: '5.15.2'
 
+    - name: Install Qt Test dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y qtbase5-dev qt5-qmake qttools5-dev-tools
+
     - name: Install performance monitoring tools
       run: |
         sudo apt-get update
         sudo apt-get install -y time valgrind
 
+    - name: Show directory structure
+      run: |
+        echo "Current directory contents:"
+        ls -la
+        echo "Project files:"
+        find . -name "*.pro"
+
     - name: Build performance test
       run: |
+        echo "Building test_components..."
+        # Create a basic test.pro file if it doesn't exist
+        if [ ! -f "test_components.pro" ]; then
+          echo "Creating test_components.pro..."
+          cat > test_components.pro << EOL
+          QT += core gui testlib
+          greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+          TARGET = test_components
+          TEMPLATE = app
+          SOURCES += test_components.cpp
+          CONFIG += testcase
+          EOL
+        fi
+        
         qmake test_components.pro
         make
-        chmod +x test_components
-        ls -la
+        echo "Build complete. Checking for executable..."
+        find . -type f -name "test_components*"
+        
+        # Try to locate the test executable
+        TEST_EXEC=$(find . -type f -name "test_components" -o -name "test_components.exe" | head -n 1)
+        if [ -n "$TEST_EXEC" ]; then
+          echo "Found test executable at: $TEST_EXEC"
+          chmod +x "$TEST_EXEC"
+        else
+          echo "Test executable not found!"
+          echo "Contents of current directory:"
+          ls -la
+          echo "Contents of debug directory (if exists):"
+          ls -la debug/ 2>/dev/null || echo "No debug directory"
+          echo "Contents of release directory (if exists):"
+          ls -la release/ 2>/dev/null || echo "No release directory"
+        fi
 
     - name: Run performance tests with time measurement
       run: |
-        echo "Running performance tests with time measurement..."
-        if [ -f "./test_components" ]; then
-          /usr/bin/time -v ./test_components 2> time_results.txt
-          cat time_results.txt
-        elif [ -f "./debug/test_components" ]; then
-          /usr/bin/time -v ./debug/test_components 2> time_results.txt
+        echo "Looking for test executable..."
+        TEST_EXEC=$(find . -type f -name "test_components" -o -name "test_components.exe" | head -n 1)
+        
+        if [ -n "$TEST_EXEC" ]; then
+          echo "Found test executable at: $TEST_EXEC"
+          echo "Running performance tests with time measurement..."
+          /usr/bin/time -v "$TEST_EXEC" 2> time_results.txt
           cat time_results.txt
         else
           echo "Error: test_components executable not found"
+          echo "Directory contents:"
+          ls -la
           find . -type f -executable
           exit 1
         fi
 
     - name: Run performance tests with Valgrind
       run: |
-        echo "Running performance tests with Valgrind..."
-        TEST_EXEC=""
-        if [ -f "./test_components" ]; then
-          TEST_EXEC="./test_components"
-        elif [ -f "./debug/test_components" ]; then
-          TEST_EXEC="./debug/test_components"
+        echo "Looking for test executable..."
+        TEST_EXEC=$(find . -type f -name "test_components" -o -name "test_components.exe" | head -n 1)
+        
+        if [ -n "$TEST_EXEC" ]; then
+          echo "Found test executable at: $TEST_EXEC"
+          echo "Running performance tests with Valgrind..."
+          valgrind --tool=callgrind --callgrind-out-file=callgrind.out "$TEST_EXEC"
+          valgrind --tool=massif --massif-out-file=massif.out "$TEST_EXEC"
         else
           echo "Error: test_components executable not found"
+          echo "Directory contents:"
+          ls -la
           find . -type f -executable
           exit 1
         fi
-        
-        valgrind --tool=callgrind --callgrind-out-file=callgrind.out $TEST_EXEC
-        valgrind --tool=massif --massif-out-file=massif.out $TEST_EXEC
 
     - name: Upload performance results
       uses: actions/upload-artifact@v4
