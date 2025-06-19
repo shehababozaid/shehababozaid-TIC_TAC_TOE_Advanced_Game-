@@ -19,12 +19,13 @@ jobs:
       with:
         version: '5.15.2'
 
-    - name: Install build tools
-      run: sudo apt-get update && sudo apt-get install -y build-essential
+    - name: Install build tools and X virtual framebuffer
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential xvfb
 
     - name: Create compatibility header for QMessageBox.h
       run: echo '#include <QMessageBox>' > QMessageBox.h
-
 
     - name: Create dummy History_Linkedlist.h
       run: echo '// dummy History_Linkedlist' > History_Linkedlist.h
@@ -32,11 +33,20 @@ jobs:
     - name: Remove problematic connect to on_Return_Prof_clicked
       run: sed -i 's/connect(ui->Return_Prof.*on_Return_Prof_clicked);//g' ai.cpp
 
-
     - name: Build the project
       run: |
         chmod +x ./build.sh
         ./build.sh
+
+    - name: Run application in X virtual framebuffer (avoids GUI crash)
+      run: |
+        EXECUTABLE=your_app_name  
+        if [[ -f "$EXECUTABLE" ]]; then
+          xvfb-run -a ./"$EXECUTABLE"
+        else
+          echo "Executable $EXECUTABLE not found!"
+          exit 1
+        fi
 
     - name: Run QML tests
       run: |
