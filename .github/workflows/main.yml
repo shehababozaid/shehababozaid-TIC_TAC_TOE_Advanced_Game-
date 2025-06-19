@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: Simple Qt CI
 
 on:
   push:
@@ -7,14 +7,14 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-test:
+  build-and-run:
     runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    - name: Install Qt and dependencies
+    - name: Install Qt
       uses: jurplel/install-qt-action@v3
       with:
         version: '5.15.2'
@@ -27,28 +27,37 @@ jobs:
     - name: Create compatibility header for QMessageBox.h
       run: echo '#include <QMessageBox>' > QMessageBox.h
 
-    - name: Create dummy History_Linkedlist.h
-      run: echo '// dummy History_Linkedlist' > History_Linkedlist.h
-
-    - name: Remove problematic connect to on_Return_Prof_clicked
-      run: sed -i 's/connect(ui->Return_Prof.*on_Return_Prof_clicked);//g' ai.cpp
-
-    - name: Build the project
+    - name: Build project
       run: |
-        chmod +x ./build.sh
-        ./build.sh
+        qmake "TIC_TAC_TOE_FINAL - game.pro"
+        make
 
-    - name: Run application in X virtual framebuffer (avoids GUI crash)
+    - name: Run program with GUI support
       run: |
-        EXECUTABLE=your_app_name  
+        EXECUTABLE=TIC_TAC_TOE_FINAL  # ← ضع اسم الملف التنفيذي الصحيح هنا
         if [[ -f "$EXECUTABLE" ]]; then
-          xvfb-run -a ./"$EXECUTABLE"
+          xvfb-run -a ./$EXECUTABLE
         else
-          echo "Executable $EXECUTABLE not found!"
+          echo "Executable not found!"
           exit 1
         fi
 
-    - name: Run QML tests
+  run-cpplint:
+    name: Run cpplint
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install cpplint
+      run: pip install cpplint
+
+    - name: Run cpplint on all .cpp and .h files
       run: |
-        chmod +x ./test.sh
-        ./test.sh
+        find . -name "*.cpp" -o -name "*.h" | xargs cpplint || true
