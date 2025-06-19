@@ -1,4 +1,4 @@
-name: Qt CI
+name: Simple Qt CI
 
 on:
   push:
@@ -37,7 +37,7 @@ jobs:
 
     - name: Run program with GUI support
       run: |
-        EXECUTABLE="TIC_TAC_TOE_FINAL-game"  # <-- Update this after checking the log!
+        EXECUTABLE="TIC_TAC_TOE_FINAL"  # <-- Update this after checking the log!
         if [[ -f "$EXECUTABLE" ]]; then
           xvfb-run -a ./"$EXECUTABLE"
         else
