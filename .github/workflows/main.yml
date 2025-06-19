@@ -84,11 +84,11 @@ jobs:
         if [ ! -f "test_components.pro" ]; then
           echo "Creating test_components.pro..."
           echo 'QT += core gui testlib
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-TARGET = test_components
-TEMPLATE = app
-SOURCES += test_components.cpp
-CONFIG += testcase' > test_components.pro
+          greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+          TARGET = test_components
+          TEMPLATE = app
+          SOURCES += test_components.cpp
+          CONFIG += testcase' > test_components.pro
         fi
         
         qmake test_components.pro
@@ -112,9 +112,7 @@ CONFIG += testcase' > test_components.pro
 
     - name: Run performance tests with time measurement
       run: |
-        echo "Looking for test executable..."
         TEST_EXEC=$(find . -type f -name "test_components" -o -name "test_components.exe" | head -n 1)
-        
         if [ -n "$TEST_EXEC" ]; then
           echo "Found test executable at: $TEST_EXEC"
           echo "Running performance tests with time measurement..."
@@ -130,9 +128,7 @@ CONFIG += testcase' > test_components.pro
 
     - name: Run performance tests with Valgrind
       run: |
-        echo "Looking for test executable..."
         TEST_EXEC=$(find . -type f -name "test_components" -o -name "test_components.exe" | head -n 1)
-        
         if [ -n "$TEST_EXEC" ]; then
           echo "Found test executable at: $TEST_EXEC"
           echo "Running performance tests with Valgrind..."
@@ -153,4 +149,4 @@ CONFIG += testcase' > test_components.pro
         path: |
           time_results.txt
           callgrind.out
-          massif.out
+          massif.out 
