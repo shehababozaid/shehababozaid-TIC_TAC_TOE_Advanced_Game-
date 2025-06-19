@@ -45,39 +45,30 @@ For detailed Software Requirements Specification (SRS), Software Design Specific
 ## Visual Snippets
 
 ### General Program Flow
-![image](https://github.com/user-attachments/assets/af94d1ea-8268-4fce-9d08-c93de78e185b)
+![image](https://github.com/shehababozaid/shehababozaid-TIC_TAC_TOE_Advanced_Game-/blob/3250796d716ef20624ceb09cb4216a6e8488a6b9/general%20program%20flow.png)
 
 ### Complete Flow with All Possible Cases
-![image](https://github.com/user-attachments/assets/6a5f9248-51b0-428e-9672-2eac065a693a)
+![image](https://github.com/shehababozaid/shehababozaid-TIC_TAC_TOE_Advanced_Game-/blob/619b026e4d09063a5e03a0042f5d5f62635de2e2/complete%20flow.png)
 
 ### Use Case Model
-![image](https://github.com/user-attachments/assets/30ca1b23-cd3d-4d31-b932-7653c74c72b7)
+![image](https://github.com/shehababozaid/shehababozaid-TIC_TAC_TOE_Advanced_Game-/blob/619b026e4d09063a5e03a0042f5d5f62635de2e2/use%20case.png)
 
 ### Whole System Diagram from SDS
-![image](https://github.com/user-attachments/assets/82882b12-cbc8-44cd-ac1f-90858d2b479b)
+![image](https://github.com/shehababozaid/shehababozaid-TIC_TAC_TOE_Advanced_Game-/blob/619b026e4d09063a5e03a0042f5d5f62635de2e2/whole%20system.png)
 
 ## Game Screenshots
 
 ### Main Window
-![]()
+![image](https://github.com/shehababozaid/shehababozaid-TIC_TAC_TOE_Advanced_Game-/blob/619b026e4d09063a5e03a0042f5d5f62635de2e2/main%20window.jpg)
 
 ### Sign In/Up Window
-![]()
+![image](https://github.com/shehababozaid/shehababozaid-TIC_TAC_TOE_Advanced_Game-/blob/619b026e4d09063a5e03a0042f5d5f62635de2e2/sign%20in-up.jpg)
 
 ### History Window for User
-![]()
-
-### Edit Account Data for User
-![]()
+![image](https://github.com/shehababozaid/shehababozaid-TIC_TAC_TOE_Advanced_Game-/blob/619b026e4d09063a5e03a0042f5d5f62635de2e2/history.jpg)
 
 ### Game Mode Window
-![]()
+![image](https://github.com/shehababozaid/shehababozaid-TIC_TAC_TOE_Advanced_Game-/blob/741abb2a9ace5c79ff5b270e5a7b75e34d55ec36/game%20settings.jpg)
 
 ### Game Window
-![]()
-
-### Users Database
-![]()
-
-### History Database
-![]()
+![image](https://github.com/shehababozaid/shehababozaid-TIC_TAC_TOE_Advanced_Game-/blob/619b026e4d09063a5e03a0042f5d5f62635de2e2/game%20window.jpg)
