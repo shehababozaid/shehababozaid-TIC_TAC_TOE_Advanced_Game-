@@ -21,7 +21,7 @@ jobs:
 
     - name: Build project
       run: |
-        qmake TIC_TAC_TOE_FINAL - game.pro
+        qmake "TIC_TAC_TOE_FINAL - game.pro"
         make
 
     - name: Run tests
@@ -41,4 +41,3 @@ jobs:
         path: |
           ./debug/
           ./release/
-
