@@ -1,4 +1,4 @@
-name: Qt CI
+name: Simple Qt CI
 
 on:
   push:
