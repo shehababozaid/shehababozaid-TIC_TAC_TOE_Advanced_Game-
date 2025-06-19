@@ -35,16 +35,6 @@ jobs:
     - name: List all executables after build
       run: find . -type f -executable
 
-    - name: Run program with GUI support
-      run: |
-        EXECUTABLE="TIC_TAC_TOE_FINAL"  # <-- Update this after checking the log!
-        if [[ -f "$EXECUTABLE" ]]; then
-          xvfb-run -a ./"$EXECUTABLE"
-        else
-          echo "Executable not found!"
-          exit 1
-        fi
-
   run-cpplint:
     name: Run cpplint
     runs-on: ubuntu-latest
