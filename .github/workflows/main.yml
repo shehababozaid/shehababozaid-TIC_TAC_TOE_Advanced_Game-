@@ -70,18 +70,40 @@ jobs:
       run: |
         qmake test_components.pro
         make
+        chmod +x test_components
+        ls -la
 
     - name: Run performance tests with time measurement
       run: |
         echo "Running performance tests with time measurement..."
-        /usr/bin/time -v ./test_components 2> time_results.txt
-        cat time_results.txt
+        if [ -f "./test_components" ]; then
+          /usr/bin/time -v ./test_components 2> time_results.txt
+          cat time_results.txt
+        elif [ -f "./debug/test_components" ]; then
+          /usr/bin/time -v ./debug/test_components 2> time_results.txt
+          cat time_results.txt
+        else
+          echo "Error: test_components executable not found"
+          find . -type f -executable
+          exit 1
+        fi
 
     - name: Run performance tests with Valgrind
       run: |
         echo "Running performance tests with Valgrind..."
-        valgrind --tool=callgrind --callgrind-out-file=callgrind.out ./test_components
-        valgrind --tool=massif --massif-out-file=massif.out ./test_components
+        TEST_EXEC=""
+        if [ -f "./test_components" ]; then
+          TEST_EXEC="./test_components"
+        elif [ -f "./debug/test_components" ]; then
+          TEST_EXEC="./debug/test_components"
+        else
+          echo "Error: test_components executable not found"
+          find . -type f -executable
+          exit 1
+        fi
+        
+        valgrind --tool=callgrind --callgrind-out-file=callgrind.out $TEST_EXEC
+        valgrind --tool=massif --massif-out-file=massif.out $TEST_EXEC
 
     - name: Upload performance results
       uses: actions/upload-artifact@v4
