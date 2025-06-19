@@ -7,6 +7,7 @@ on:
     branches: [ main ]
   release:
     types: [published]
+  workflow_dispatch: # Allow manual triggering
 
 jobs:
   build-and-run:
@@ -167,7 +168,7 @@ jobs:
     name: Deploy to Staging
     runs-on: ubuntu-latest
     needs: [build-and-run, run-cpplint, performance-test]
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/develop' || github.event_name == 'workflow_dispatch'
     environment: staging
 
     steps:
@@ -190,6 +191,8 @@ jobs:
     - name: Deploy to staging
       run: |
         echo "Deploying to staging environment..."
+        echo "Branch: ${{ github.ref }}"
+        echo "Event: ${{ github.event_name }}"
         # Add your staging deployment commands here
         # Examples:
         # - Copy files to staging server
@@ -229,6 +232,7 @@ jobs:
     - name: Deploy to production
       run: |
         echo "Deploying to production environment..."
+        echo "Release: ${{ github.event.release.tag_name }}"
         # Add your production deployment commands here
         # Examples:
         # - Copy files to production server
