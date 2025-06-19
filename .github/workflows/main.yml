@@ -1,10 +1,12 @@
-name: Simple Qt CI
+name: Qt CI/CD Pipeline
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   pull_request:
     branches: [ main ]
+  release:
+    types: [published]
 
 jobs:
   build-and-run:
@@ -26,6 +28,16 @@ jobs:
 
     - name: List all executables after build
       run: find . -type f -executable
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: |
+          TIC_TAC_TOE_FINAL*
+          *.exe
+          debug/
+          release/
 
   run-cpplint:
     name: Run cpplint
@@ -149,4 +161,97 @@ jobs:
         path: |
           time_results.txt
           callgrind.out
-          massif.out 
+          massif.out
+
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    needs: [build-and-run, run-cpplint, performance-test]
+    if: github.ref == 'refs/heads/develop'
+    environment: staging
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifacts
+        path: ./artifacts
+
+    - name: Setup deployment environment
+      run: |
+        echo "Setting up staging environment..."
+        mkdir -p staging_deploy
+        cp -r artifacts/* staging_deploy/ || true
+        echo "Staging deployment ready"
+
+    - name: Deploy to staging
+      run: |
+        echo "Deploying to staging environment..."
+        # Add your staging deployment commands here
+        # Examples:
+        # - Copy files to staging server
+        # - Deploy to staging cloud environment
+        # - Update staging database
+        echo "Staging deployment completed successfully"
+
+    - name: Notify staging deployment
+      run: |
+        echo "Staging deployment notification sent"
+        # Add notification commands (Slack, email, etc.)
+
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [build-and-run, run-cpplint, performance-test]
+    if: github.event_name == 'release' && github.event.action == 'published'
+    environment: production
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: build-artifacts
+        path: ./artifacts
+
+    - name: Setup production environment
+      run: |
+        echo "Setting up production environment..."
+        mkdir -p production_deploy
+        cp -r artifacts/* production_deploy/ || true
+        echo "Production deployment ready"
+
+    - name: Deploy to production
+      run: |
+        echo "Deploying to production environment..."
+        # Add your production deployment commands here
+        # Examples:
+        # - Copy files to production server
+        # - Deploy to production cloud environment
+        # - Update production database
+        # - Restart production services
+        echo "Production deployment completed successfully"
+
+    - name: Create release notes
+      run: |
+        echo "Creating release notes..."
+        echo "Release ${{ github.event.release.tag_name }} deployed successfully" > release_notes.txt
+        echo "Deployment timestamp: $(date)" >> release_notes.txt
+
+    - name: Notify production deployment
+      run: |
+        echo "Production deployment notification sent"
+        # Add notification commands (Slack, email, etc.)
+
+    - name: Upload release artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: production-release-${{ github.event.release.tag_name }}
+        path: |
+          production_deploy/
+          release_notes.txt 
