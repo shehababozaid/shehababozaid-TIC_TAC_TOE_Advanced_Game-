@@ -41,3 +41,37 @@ jobs:
           echo "Executable not found!"
           exit 1
         fi
+
+  run-cpplint:
+    name: Run cpplint
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Set up job
+      run: echo "Setting up job"
+
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.x'
+
+    - name: Install cpplint
+      run: pip install cpplint
+
+    - name: Run cpplint on Authentication.cpp
+      run: cpplint Authentication.cpp || true
+
+    - name: Run cpplint on Headers/Authentication.h
+      run: cpplint Headers/Authentication.h || true
+
+    - name: Post Set up Python
+      run: echo "Python setup done"
+
+    - name: Post Checkout Code
+      run: echo "Code checkout done"
+
+    - name: Complete job
+      run: echo "cpplint job complete"
