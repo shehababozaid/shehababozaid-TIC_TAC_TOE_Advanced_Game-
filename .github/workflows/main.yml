@@ -1,4 +1,4 @@
-name: Simple Qt CI
+name: Qt CI
 
 on:
   push:
@@ -32,11 +32,14 @@ jobs:
         qmake "TIC_TAC_TOE_FINAL - game.pro"
         make
 
+    - name: List all executables after build
+      run: find . -type f -executable
+
     - name: Run program with GUI support
       run: |
-        EXECUTABLE="TIC_TAC_TOE_FINAL - game"
+        EXECUTABLE="TIC_TAC_TOE_FINAL-game"  # <-- Update this after checking the log!
         if [[ -f "$EXECUTABLE" ]]; then
-          xvfb-run -a ./$EXECUTABLE
+          xvfb-run -a ./"$EXECUTABLE"
         else
           echo "Executable not found!"
           exit 1
