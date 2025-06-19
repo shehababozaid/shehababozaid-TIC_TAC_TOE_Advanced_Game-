@@ -1,4 +1,4 @@
-name: Simple Qt CI
+name: Qt CI
 
 on:
   push:
@@ -81,17 +81,14 @@ jobs:
     - name: Build performance test
       run: |
         echo "Building test_components..."
-        # Create a basic test.pro file if it doesn't exist
         if [ ! -f "test_components.pro" ]; then
           echo "Creating test_components.pro..."
-          cat > test_components.pro << EOL
-          QT += core gui testlib
-          greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-          TARGET = test_components
-          TEMPLATE = app
-          SOURCES += test_components.cpp
-          CONFIG += testcase
-          EOL
+          echo 'QT += core gui testlib
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+TARGET = test_components
+TEMPLATE = app
+SOURCES += test_components.cpp
+CONFIG += testcase' > test_components.pro
         fi
         
         qmake test_components.pro
@@ -99,7 +96,6 @@ jobs:
         echo "Build complete. Checking for executable..."
         find . -type f -name "test_components*"
         
-        # Try to locate the test executable
         TEST_EXEC=$(find . -type f -name "test_components" -o -name "test_components.exe" | head -n 1)
         if [ -n "$TEST_EXEC" ]; then
           echo "Found test executable at: $TEST_EXEC"
