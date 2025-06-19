@@ -1,4 +1,4 @@
-name: Simple Qt CI
+name: Run cpplint
 
 on:
   push:
@@ -7,49 +7,10 @@ on:
     branches: [ main ]
 
 jobs:
-  build-and-run:
+  cpplint:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Install Qt
-      uses: jurplel/install-qt-action@v3
-      with:
-        version: '5.15.2'
-
-    - name: Install build tools and X virtual framebuffer
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y build-essential xvfb
-
-    - name: Create compatibility header for QMessageBox.h
-      run: echo '#include <QMessageBox>' > QMessageBox.h
-
-    - name: Build project
-      run: |
-        qmake "TIC_TAC_TOE_FINAL - game.pro"
-        make
-
-    - name: Run program with GUI support
-      run: |
-        EXECUTABLE=your_app_name  # ← غيره لو اسمك غير كده
-        if [[ -f "$EXECUTABLE" ]]; then
-          xvfb-run -a ./$EXECUTABLE
-        else
-          echo "Executable not found!"
-          exit 1
-        fi
-
-  run-cpplint:
-    name: Run cpplint
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Set up job
-      run: echo "Setting up job"
-
     - name: Checkout Code
       uses: actions/checkout@v3
 
@@ -61,17 +22,10 @@ jobs:
     - name: Install cpplint
       run: pip install cpplint
 
-    - name: Run cpplint on Authentication.cpp
-      run: cpplint Authentication.cpp || true
+    - name: Run cpplint on .cpp files
+      run: |
+        find . -name "*.cpp" | xargs cpplint
 
-    - name: Run cpplint on Headers/Authentication.h
-      run: cpplint Headers/Authentication.h || true
-
-    - name: Post Set up Python
-      run: echo "Python setup done"
-
-    - name: Post Checkout Code
-      run: echo "Code checkout done"
-
-    - name: Complete job
-      run: echo "cpplint job complete"
+    - name: Run cpplint on .h files
+      run: |
+        find . -name "*.h" | xargs cpplint
