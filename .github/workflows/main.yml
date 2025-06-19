@@ -17,13 +17,16 @@ jobs:
     - name: Install Qt and dependencies
       uses: jurplel/install-qt-action@v3
       with:
-        version: '5.15.2'  # or your required Qt version
+        version: '5.15.2'
 
     - name: Install build tools
       run: sudo apt-get update && sudo apt-get install -y build-essential
 
     - name: Create compatibility header for QMessageBox.h
       run: echo '#include <QMessageBox>' > QMessageBox.h
+
+    - name: Create dummy History_Linkedlist.h
+      run: echo '// dummy History_Linkedlist' > History_Linkedlist.h
 
     - name: Build the project
       run: |
