@@ -318,13 +318,6 @@ void ai::on_RESET_clicked()
     resetGame();
 }
 
-void ai::on_Return_Prof_clicked()
-{
-
-
-
-
-     resetGame();
-    close();
-     CallBackAIGame();
+void ai::on_Return_Prof_clicked() {
+    // TODO: Implement the function logic here
 }
