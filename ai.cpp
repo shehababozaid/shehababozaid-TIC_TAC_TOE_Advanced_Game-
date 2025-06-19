@@ -16,7 +16,7 @@ ai::ai(QWidget *parent)
     initializeBoard();
     printBoard();
     connect(ui->RESET, &QPushButton::clicked, this, &ai::on_RESET_clicked);
-    connect(ui->Return_Prof, &QPushButton::clicked, this, on_Return_Prof_clicked);
+    connect(ui->Return_Prof, &QPushButton::clicked, this, &ai::on_Return_Prof_clicked);
 
     this->setStyleSheet(
         "background-image: url(:/res/CSS/f9090857-a77b-48ce-a267-c997b3b21055.png);"
