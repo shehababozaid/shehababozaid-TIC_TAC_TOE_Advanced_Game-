@@ -2,7 +2,7 @@
 #define PLAYER_LINKEDLIST_H
 
 #include <QString>
-#include <QMessageBox.h>
+#include <QMessageBox>
 
 #include "History_LinkedList.h"
 
