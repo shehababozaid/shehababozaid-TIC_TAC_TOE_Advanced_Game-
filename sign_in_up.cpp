@@ -1,6 +1,6 @@
 #include "sign_in_up.h"
 #include "ui_sign_in_up.h"
-QString Amir="\0";
+QString shehab="\0";
 int Registering_State = SIGN_IN;
 QString user_name = "\0";
 QString pass_word = "\0";
@@ -114,7 +114,7 @@ int checkaccount(){
     int Return_State = 0;
     if(Registering_State == SIGN_IN){
         if(horiz.isfound(user_name, pass_word, &currentPlayer)){
-            Amir=currentPlayer->username;
+            shehab=currentPlayer->username;
             qDebug() << "Sign in successfully";
             Return_State = SIGN_IN_Completed;
         }
@@ -131,7 +131,7 @@ int checkaccount(){
         else{
             qDebug() << "Sign up in progress";
             horiz.push_back(user_name, pass_word, &currentPlayer);//horiz linkedlist updated
-            Amir=currentPlayer->username;
+            shehab=currentPlayer->username;
             qDebug() << "LinkedList Updated";
             uploadUserDataTodatabase(user_name, pass_word, PlDatabaseName, PlTableName);//database updated
             Return_State = SIGN_UP_Completed;
@@ -143,7 +143,7 @@ int checkaccount(){
         qDebug()<< "New password is" << pass_word;
         DatabaseManager::updatePlayerData( playerdatabase, PlTableName, currentPlayer->username, currentPlayer->password, user_name, pass_word);
         currentPlayer->username = user_name;
-        Amir=currentPlayer->username;
+        shehab=currentPlayer->username;
         currentPlayer->password = pass_word;
         Return_State = CHANGE_INFO_Completed;
     }
@@ -175,7 +175,7 @@ int checkaccountTest(int Registering_StateTest)
     int Return_State = 0;
     if(Registering_StateTest == SIGN_IN){
         if(true){
-            Amir=currentPlayer->username;
+            shehab=currentPlayer->username;
             qDebug() << "Sign in successfully";
             Return_State = SIGN_IN_Completed;
         }
@@ -192,7 +192,7 @@ int checkaccountTest(int Registering_StateTest)
         else{
             qDebug() << "Sign up in progress";
             horiz.push_back(user_name, pass_word, &currentPlayer);//horiz linkedlist updated
-            Amir=currentPlayer->username;
+            shehab=currentPlayer->username;
             qDebug() << "LinkedList Updated";
             uploadUserDataTodatabase(user_name, pass_word, PlDatabaseName, PlTableName);//database updated
             Return_State = SIGN_UP_Completed;
@@ -204,7 +204,7 @@ int checkaccountTest(int Registering_StateTest)
         qDebug()<< "New password is" << pass_word;
         DatabaseManager::updatePlayerData( playerdatabase, PlTableName, currentPlayer->username, currentPlayer->password, user_name, pass_word);
         currentPlayer->username = user_name;
-        Amir=currentPlayer->username;
+        shehab=currentPlayer->username;
         currentPlayer->password = pass_word;
         Return_State = CHANGE_INFO_Completed;
     }

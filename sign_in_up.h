@@ -27,7 +27,7 @@ extern playerlinkedlist horiz;
 extern playerlinkedlist::player* currentPlayer;
 extern QString PlDatabaseName;
 extern QSqlDatabase playerdatabase;
-extern QString Amir;
+extern QString shehab;
 
 
 namespace Ui {

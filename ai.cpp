@@ -93,19 +93,19 @@ void ai::cellClicked()
         font.setPointSize(26);  // Adjust the font size as needed
         font.setBold(true);     // Make the font bold
         clickedButton->setFont(font);  // Set the font for the clicked button
-        if(doesUserDatabaseExist(Amir));
+        if(doesUserDatabaseExist(shehab));
 
         else
-            createUserDatabase(Amir);
+            createUserDatabase(shehab);
 
         if (checkWin(playerToken)) {
             QMessageBox::information(this, "Game ended", playerToken + " wins!");
-            saveGameToUserDatabase(Amir, "You Won");
+            saveGameToUserDatabase(shehab, "You Won");
             resetGame();
         } else if (isBoardFull()) {
             QMessageBox::information(this, "Game ended", "It's a draw!");
 
-          saveGameToUserDatabase(Amir, "Draw");
+          saveGameToUserDatabase(shehab, "Draw");
             resetGame();
         } else {
             currentPlayer = aiToken;
@@ -289,18 +289,18 @@ void ai::makeAIMove()
     if (bestMoveRow != -1 && bestMoveCol != -1) {
         board[bestMoveRow][bestMoveCol] = aiToken.at(0).toLatin1();
         printBoard();
-        if(doesUserDatabaseExist(Amir));
+        if(doesUserDatabaseExist(shehab));
 
         else
-            createUserDatabase(Amir);
+            createUserDatabase(shehab);
 
         if (checkWin(aiToken)) {
             QMessageBox::information(this, "Game Over", aiToken + " wins!");
-          saveGameToUserDatabase(Amir, "AI Won");
+          saveGameToUserDatabase(shehab, "AI Won");
             resetGame();
         } else if (isBoardFull()) {
             QMessageBox::information(this, "Game Over", "It's a draw!");
-           saveGameToUserDatabase(Amir, "Draw");
+           saveGameToUserDatabase(shehab, "Draw");
             resetGame();
         } else {
             currentPlayer = playerToken; // Switch back to player's turn
@@ -318,6 +318,13 @@ void ai::on_RESET_clicked()
     resetGame();
 }
 
-void ai::on_Return_Prof_clicked() {
-    // TODO: Implement the function logic here
+void ai::on_Return_Prof_clicked()
+{
+
+
+
+
+     resetGame();
+    close();
+     CallBackAIGame();
 }
