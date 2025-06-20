@@ -208,9 +208,9 @@ void createUserDatabase(const QString &username) {
     // Create the table for storing game results
     QSqlQuery query(db);
     QString createTableQuery = "CREATE TABLE IF NOT EXISTS Games ("
-    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-    "winner VARCHAR(50), "
-    "date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+                               "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                               "winner VARCHAR(50), "
+                               "date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
     if (!query.exec(createTableQuery)) {
         qDebug() << "Error: unable to create table for user" << username;
         qDebug() << query.lastError().text();
