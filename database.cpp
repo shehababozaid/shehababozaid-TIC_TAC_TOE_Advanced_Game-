@@ -27,7 +27,6 @@ bool DatabaseManager::openDatabase(QSqlDatabase& db){
     return true;
 }
 
-
 void DatabaseManager::closeDatabase(QSqlDatabase& db) {
     // Check if the database connection is valid and open
     if (!db.isValid() || !db.isOpen()) {
@@ -71,7 +70,6 @@ bool DatabaseManager::createTable(QSqlDatabase& db, QString& tableName, QString&
 }
 
 int DatabaseManager::checkDatabase(QString& dbName, QSqlDatabase& db, QString dbConnection) {
-
     QFileInfo dbFile(dbName);
     //Check if the database file exits
     if (!dbFile.exists() || !dbFile.isFile()) {
@@ -106,12 +104,13 @@ int DatabaseManager::checkDatabase(QString& dbName, QSqlDatabase& db, QString db
 }
 
 bool DatabaseManager::retrievePlayerData(QString& dbName, QSqlDatabase& db, QString& tablename, playerlinkedlist& playerList) {
-    //Not used dummy pointer to player
+    // Not used dummy pointer to player
     playerlinkedlist::player* currentNodeToBeRetrieved = nullptr;
     while (!playerList.empty()) {
         playerList.pop_front();
     }
     qDebug() << "Linked list has been emptied.";
+
     // Ensure the database name is not empty
     if (dbName.isEmpty()) {
         qDebug() << "Invalid database name.";
@@ -136,15 +135,17 @@ bool DatabaseManager::retrievePlayerData(QString& dbName, QSqlDatabase& db, QStr
     }
 
     // Fetch data from the query result
+    // NOTE: The passwords retrieved here are already hashed from the database
     while (query.next()) {
         QString username = query.value(0).toString();
-        QString password = query.value(1).toString();
-        playerList.push_back(username, password, &currentNodeToBeRetrieved);
+        QString hashedPassword = query.value(1).toString(); // This is already a hash
+        playerList.push_back(username, hashedPassword, &currentNodeToBeRetrieved);
     }
     qDebug() << "Retrieving happened successfully";
     return true;
 }
 
+// ORIGINAL: Keep for backward compatibility
 bool DatabaseManager::updatePlayerData(QSqlDatabase& db, const QString& tableName, const QString& oldUsername, const QString& oldPassword, const QString& newUsername, const QString& newPassword) {
     // Check if the database connection is valid and open
     if (!db.isValid() || !db.isOpen()) {
@@ -156,14 +157,53 @@ bool DatabaseManager::updatePlayerData(QSqlDatabase& db, const QString& tableNam
     QSqlQuery query(db);
 
     // Prepare the SQL command to update the player's username and password
+    // NOTE: oldPassword is now a hash, newPassword is now a hash
     QString updateQuery = "UPDATE " + tableName + " SET username = :newUsername, password = :newPassword WHERE username = :oldUsername AND password = :oldPassword";
     query.prepare(updateQuery);
 
     // Bind the values to the placeholders
     query.bindValue(":newUsername", newUsername);
-    query.bindValue(":newPassword", newPassword);
+    query.bindValue(":newPassword", newPassword); // This is already hashed
     query.bindValue(":oldUsername", oldUsername);
-    query.bindValue(":oldPassword", oldPassword);
+    query.bindValue(":oldPassword", oldPassword); // This is already hashed
+
+    // Execute the SQL command to update the data
+    if (!query.exec()) {
+        // Error handling
+        qDebug() << "Error: Failed to update player data for" << oldUsername << ":" << query.lastError().text();
+        return false;
+    }
+
+    // Check if any row was affected (meaning the update was successful)
+    if (query.numRowsAffected() == 0) {
+        qDebug() << "Error: No matching record found to update";
+        return false;
+    }
+
+    qDebug() << "Player data for" << oldUsername << "updated successfully to" << newUsername;
+    return true;
+}
+
+// NEW: More secure update method that only requires username (recommended for hash-based auth)
+bool DatabaseManager::updatePlayerDataByUsername(QSqlDatabase& db, const QString& tableName, const QString& oldUsername, const QString& newUsername, const QString& newPassword) {
+    // Check if the database connection is valid and open
+    if (!db.isValid() || !db.isOpen()) {
+        qDebug() << "Error: Database is not open or is invalid";
+        return false;
+    }
+
+    // Create a QSqlQuery object for executing SQL commands
+    QSqlQuery query(db);
+
+    // Prepare the SQL command to update the player's username and password
+    // Only using username for identification (more secure)
+    QString updateQuery = "UPDATE " + tableName + " SET username = :newUsername, password = :newPassword WHERE username = :oldUsername";
+    query.prepare(updateQuery);
+
+    // Bind the values to the placeholders
+    query.bindValue(":newUsername", newUsername);
+    query.bindValue(":newPassword", newPassword); // This is already hashed
+    query.bindValue(":oldUsername", oldUsername);
 
     // Execute the SQL command to update the data
     if (!query.exec()) {
@@ -208,9 +248,9 @@ void createUserDatabase(const QString &username) {
     // Create the table for storing game results
     QSqlQuery query(db);
     QString createTableQuery = "CREATE TABLE IF NOT EXISTS Games ("
-    "id INTEGER PRIMARY KEY AUTOINCREMENT, "
-    "winner VARCHAR(50), "
-    "date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
+                               "id INTEGER PRIMARY KEY AUTOINCREMENT, "
+                               "winner VARCHAR(50), "
+                               "date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
     if (!query.exec(createTableQuery)) {
         qDebug() << "Error: unable to create table for user" << username;
         qDebug() << query.lastError().text();
@@ -218,8 +258,6 @@ void createUserDatabase(const QString &username) {
         qDebug() << "Table created successfully for user" << username;
     }
 }
-
-
 
 void saveGameToUserDatabase(const QString &username, const QString &winner) {
     // Sanitize username to ensure it matches the created database connection
@@ -259,12 +297,11 @@ void saveGameToUserDatabase(const QString &username, const QString &winner) {
 
     if (!query.exec()) {
         qDebug() << "Error: " << query.lastError().text();
-
     } else {
         qDebug() << "Game saved successfully for user" << username;
-
     }
 }
+
 bool doesUserDatabaseExist(const QString &username) {
     // Sanitize username to ensure it is a valid file name
     QString sanitizedUsername = username;
@@ -283,22 +320,3 @@ bool doesUserDatabaseExist(const QString &username) {
         return false;
     }
 }
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
