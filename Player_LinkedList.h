@@ -6,6 +6,7 @@
 
 #include "History_LinkedList.h"
 
+
 class playerlinkedlist {
 
 public:
@@ -39,7 +40,7 @@ public:
         return listSize;
     }
 
-    //search algorithm - DEPRECATED: This is for old password checking
+    //search algorithm
     bool isfound(QString user, QString pass, player** plNode) {
         bool flag = false;
         if(empty()){
@@ -50,20 +51,6 @@ public:
             flag = true;
         }
         return flag;
-    }
-
-    // NEW: Find user by username only (for hash-based authentication)
-    bool findUserByUsername(const QString& username, player** foundPlayer) {
-        player* current = head;
-        while (current != nullptr) {
-            if (current->username == username) {
-                *foundPlayer = current;
-                return true;
-            }
-            current = current->next;
-        }
-        *foundPlayer = nullptr;
-        return false;
     }
 
     // Add element to the end of the list
@@ -135,8 +122,6 @@ public:
         --listSize;
     }
 
-    // DEPRECATED: This method searches by both username and password
-    // Keep it for backward compatibility, but new code should use findUserByUsername
     player* GetPlayerNode(QString user, QString pass) {
         player* temp = head;
         while (temp != nullptr) {

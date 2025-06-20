@@ -5,7 +5,6 @@
 #include <QString>
 #include <QMessageBox>
 #include <QTimer>
-#include <QCryptographicHash>  // Add this for hashing
 #include "mainwindow.h"
 #include "profile.h"
 #include "Player_LinkedList.h"
@@ -28,7 +27,8 @@ extern playerlinkedlist horiz;
 extern playerlinkedlist::player* currentPlayer;
 extern QString PlDatabaseName;
 extern QSqlDatabase playerdatabase;
-extern QString shehab;
+extern QString Amir;
+
 
 namespace Ui {
 class Sign_In_Up;
@@ -44,21 +44,23 @@ public:
 
 private slots:
     void on_pushButton_clicked();
+
     void on_PB_Login_clicked();
+
     void on_passwordinput_textChanged(const QString &arg1);
+
     void on_UsernameInput_textChanged(const QString &arg1);
 
 private:
     Ui::Sign_In_Up *ui;
+
 };
+
 
 /******************************************************APIs*************************************************************************/
 
 int checkaccount();
 bool uploadUserDataTodatabase(QString& username, QString& password, QString& dbName, QString& tableName);
 
-// New hash functions
-QString hashPassword(const QString& password);
-bool verifyPassword(const QString& password, const QString& hashedPassword);
 
 #endif // SIGN_IN_UP_H
