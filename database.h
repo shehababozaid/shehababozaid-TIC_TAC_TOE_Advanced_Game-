@@ -1,7 +1,6 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 
-
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -16,11 +15,9 @@
 #define DatabaseEmpty                 2
 #define DatabaseNotEmpty              3
 
-
 void createUserDatabase(const QString &username);
 void saveGameToUserDatabase(const QString &username, const QString &winner);
 bool doesUserDatabaseExist(const QString &username);
-
 
 class DatabaseManager
 {
@@ -31,7 +28,12 @@ public:
     static bool createTable(QSqlDatabase& db, QString& tableName, QString& tableDefinition);
     static int checkDatabase(QString& dbName, QSqlDatabase& db, QString dbConnection);
     static bool retrievePlayerData(QString& dbName, QSqlDatabase& db, QString& tablename, playerlinkedlist& playerList);
+
+    // Updated: Now uses username-only identification (for hash-based auth)
     static bool updatePlayerData(QSqlDatabase& db, const QString& tableName, const QString& oldUsername, const QString& oldPassword, const QString& newUsername, const QString& newPassword);
+
+    // NEW: Alternative update method that only requires old username (more secure)
+    static bool updatePlayerDataByUsername(QSqlDatabase& db, const QString& tableName, const QString& oldUsername, const QString& newUsername, const QString& newPassword);
 
 private:
     static QSqlDatabase Tetra;
